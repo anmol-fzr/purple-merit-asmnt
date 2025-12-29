@@ -1,5 +1,5 @@
 {
-  "name": "@my-better-t-app/db",
+  "name": "@pm/db",
   "type": "module",
   "exports": {
     ".": {
@@ -12,12 +12,12 @@
   "scripts": {},
   "devDependencies": {
     "typescript": "catalog:",
-    "@my-better-t-app/config": "workspace:*"
+    "@pm/config": "workspace:*"
   },
   "dependencies": {
     "mongoose": "^8.14.0",
     "dotenv": "catalog:",
     "zod": "catalog:",
-    "@my-better-t-app/env": "workspace:*"
+    "@pm/env": "workspace:*"
   }
 }

@@ -29,7 +29,7 @@
     "@tanstack/react-query": "^5.90.12",
     "dotenv": "catalog:",
     "zod": "catalog:",
-    "@my-better-t-app/env": "workspace:*"
+    "@pm/env": "workspace:*"
   },
   "devDependencies": {
     "@tanstack/react-router-devtools": "^1.141.1",
@@ -43,6 +43,6 @@
     "vite": "^6.2.2",
     "@tanstack/react-query-devtools": "^5.91.1",
     "typescript": "catalog:",
-    "@my-better-t-app/config": "workspace:*"
+    "@pm/config": "workspace:*"
   }
 }

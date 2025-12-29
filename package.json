@@ -1,5 +1,5 @@
 {
-  "name": "my-better-t-app",
+  "name": "pm",
   "private": true,
   "workspaces": {
     "packages": [
@@ -25,13 +25,13 @@
   "dependencies": {
     "dotenv": "catalog:",
     "zod": "catalog:",
-    "@my-better-t-app/env": "workspace:*"
+    "@pm/env": "workspace:*"
   },
   "devDependencies": {
     "turbo": "^2.6.3",
     "typescript": "catalog:",
     "@types/bun": "catalog:",
-    "@my-better-t-app/config": "workspace:*"
+    "@pm/config": "workspace:*"
   },
   "packageManager": "bun@1.3.5"
 }
