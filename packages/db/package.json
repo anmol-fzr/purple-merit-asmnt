@@ -1,0 +1,23 @@
+{
+  "name": "@my-better-t-app/db",
+  "type": "module",
+  "exports": {
+    ".": {
+      "default": "./src/index.ts"
+    },
+    "./*": {
+      "default": "./src/*.ts"
+    }
+  },
+  "scripts": {},
+  "devDependencies": {
+    "typescript": "catalog:",
+    "@my-better-t-app/config": "workspace:*"
+  },
+  "dependencies": {
+    "mongoose": "^8.14.0",
+    "dotenv": "catalog:",
+    "zod": "catalog:",
+    "@my-better-t-app/env": "workspace:*"
+  }
+}
