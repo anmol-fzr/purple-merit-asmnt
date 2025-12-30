@@ -26,8 +26,13 @@ authRouter
         userId: savedUser.id,
       });
 
-      return c.json({ data: { token }, message: "Sign Up Successfull" });
+      return c.json({
+        data: { token, name: user.fullName },
+        message: "Sign Up Successfull",
+      });
     } catch (error) {
+      console.error(error);
+
       if (error?.code === 11000) {
         return c.json(
           {
@@ -76,7 +81,10 @@ authRouter
       userId: foundUser.id,
     });
 
-    return c.json({ data: { token }, message: "Sign In Successfull" });
+    return c.json({
+      data: { token, name: foundUser.fullName },
+      message: "Sign In Successfull",
+    });
   })
   .route("/profile", userProfileRouter);
 

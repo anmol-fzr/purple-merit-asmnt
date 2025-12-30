@@ -4,6 +4,7 @@ import {
   createRootRouteWithContext,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import Header from "@/components/header";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -34,6 +35,8 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
   }),
 });
 
+const queryClient = new QueryClient();
+
 function RootComponent() {
   return (
     <>
@@ -43,9 +46,11 @@ function RootComponent() {
         disableTransitionOnChange
         storageKey="vite-ui-theme"
       >
-        <div className="grid grid-rows-[auto_1fr] h-svh">
-          <Outlet />
-        </div>
+        <QueryClientProvider client={queryClient}>
+          <div className="grid grid-rows-[auto_1fr] h-svh">
+            <Outlet />
+          </div>
+        </QueryClientProvider>
         <Toaster richColors />
       </ThemeProvider>
       <TanStackRouterDevtools position="bottom-left" />

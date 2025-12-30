@@ -40,11 +40,13 @@ app.get("/doc", (c) => c.json(openApiDoc));
 app.get("/ui", swaggerUI({ url: "/doc" }));
 
 app.use(logger());
+
 app.use(
-  "/*",
   cors({
-    origin: env.CORS_ORIGIN,
-    allowMethods: ["GET", "POST", "OPTIONS"],
+    origin: "http://localhost:3001",
+    credentials: true,
+    allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowHeaders: ["Content-Type", "Authorization"],
   }),
 );
 
