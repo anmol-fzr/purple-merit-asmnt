@@ -4,7 +4,7 @@ import {
 } from "@tanstack/react-query";
 import { USERS } from "../api";
 
-function getUsersOpts() {
+export function getUsersOpts() {
   return infiniteQueryOptions({
     queryKey: ["USERS"] as const,
     queryFn: () => USERS.ALL(),

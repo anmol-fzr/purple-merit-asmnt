@@ -12,20 +12,29 @@ import { ActiveBadge } from "./active-badge";
 import { InActiveBadge } from "./inactive-badge";
 import { AdminBadge } from "./admin-badge";
 import { UserBadge } from "./user-badge";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import { useUpdateUser } from "../hooks/mutations";
+import { Button } from "@/components/ui/button";
 
 export function UsersTable() {
   const { users, isFetching, fetchNextPage } = useGetUsers();
 
   const data = useMemo(
-    () => users?.pages?.flatMap((page) => page.data),
+    () => users?.pages?.flatMap((page) => page.data) ?? [],
     [users],
   );
 
   const currRows = useMemo(
     () =>
-      users.pages.reduce((prev, curr) => {
+      users?.pages.reduce((prev, curr) => {
         return prev + (curr?.data?.length ?? 0);
-      }, 0),
+      }, 0) ?? 0,
     [users],
   );
 
@@ -33,6 +42,8 @@ export function UsersTable() {
     () => users?.pages?.[0]?.paginate?.total ?? 0,
     [users],
   );
+
+  const { mutate: updateUser } = useUpdateUser();
 
   const columns = useMemo<ColumnDef<User>[]>(
     () => [
@@ -48,17 +59,6 @@ export function UsersTable() {
         accessorKey: "fullName",
         header: "Name",
       },
-      // {
-      //   accessorKey: "phoneNumber",
-      //   header: "Phone Number",
-      //   cell: ({ row }) => {
-      //     const { phoneNumber = "" } = row.original;
-      //     if (isNull(phoneNumber)) {
-      //       return <TableColNaValue />;
-      //     }
-      //     return phoneNumber;
-      //   },
-      // },
       {
         accessorKey: "email",
         header: "Email Address",
@@ -79,64 +79,26 @@ export function UsersTable() {
           return status === "active" ? <ActiveBadge /> : <InActiveBadge />;
         },
       },
-      // {
-      // 	id: "verified",
-      // 	accessorKey: "verified",
-      // 	header: "verified",
-      // 	cell: ({ row }) => {
-      // 		const { phoneNumberVerified } = row.original;
-      // 		return <UserVerificationBadge isVerified={phoneNumberVerified} />;
-      // 	},
-      // },
-      // {
-      //   accessorKey: "createdAt",
-      //   header: "CreatedAt",
-      //   cell: TableColCreatedAt,
-      // },
-      // {
-      //   accessorKey: "updatedAt",
-      //   header: "UpdatedAt",
-      //   cell: TableColUpdatedAt,
-      // },
-      // {
-      //   id: "actions",
-      //   header: "Actions",
-      //   enableHiding: false,
-      //   cell: ({ row }) => {
-      //     const { id } = row.original;
-      //
-      //     const handleBan = () => {
-      //       handleBanOpen(id);
-      //     };
-      //
-      //     const handleDelete = () => {
-      //       handleDeleteOpen(id);
-      //     };
-      //
-      //     return (
-      //       <DropdownMenu>
-      //         <DropdownMenuTrigger asChild>
-      //           <Button variant="ghost" className="h-8 w-8 p-0">
-      //             <span className="sr-only">Open menu</span>
-      //             <MoreHorizontal />
-      //           </Button>
-      //         </DropdownMenuTrigger>
-      //         <DropdownMenuContent align="end">
-      //           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-      //           <DropdownMenuItem>Change User Password</DropdownMenuItem>
-      //           <DropdownMenuItem>Impersonate User</DropdownMenuItem>
-      //           <DropdownMenuSeparator />
-      //           <DropdownMenuItem variant="destructive" onClick={handleBan}>
-      //             Ban User
-      //           </DropdownMenuItem>
-      //           <DropdownMenuItem variant="destructive" onClick={handleDelete}>
-      //             Delete User
-      //           </DropdownMenuItem>
-      //         </DropdownMenuContent>
-      //       </DropdownMenu>
-      //     );
-      //   },
-      // },
+      {
+        id: "status_udpator",
+        header: "Update Status",
+        cell: ({ row }) => {
+          const { _id, status } = row.original;
+
+          const handleClick = () => {
+            updateUser({
+              userId: _id,
+              status: status === "active" ? "inactive" : "active",
+            });
+          };
+
+          return (
+            <Button onClick={handleClick}>
+              {status === "active" ? "Make Inactive" : "Make Active"}
+            </Button>
+          );
+        },
+      },
     ],
     [],
   );
@@ -146,18 +108,53 @@ export function UsersTable() {
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    initialState: {
+      pagination: {
+        pageSize: 10,
+      },
+    },
   });
 
   return (
-    <>
-      <div className="flex gap-4">
-        {/*
-        <TableSearch searchQueryParamKey={queryParamKey} />
-        */}
-      </div>
+    <div className="space-y-4">
       <DataTable
         {...{ table, isFetching, fetchNextPage, currRows, totalRows }}
       />
-    </>
+
+      <div className="flex items-center justify-end space-x-2 py-4">
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                className={
+                  !table.getCanPreviousPage()
+                    ? "pointer-events-none opacity-50"
+                    : "cursor-pointer"
+                }
+                onClick={() => table.previousPage()}
+              />
+            </PaginationItem>
+
+            <PaginationItem>
+              <div className="flex w-[100px] items-center justify-center text-sm font-medium">
+                Page {table.getState().pagination.pageIndex + 1} of{" "}
+                {table.getPageCount()}
+              </div>
+            </PaginationItem>
+
+            <PaginationItem>
+              <PaginationNext
+                className={
+                  !table.getCanNextPage()
+                    ? "pointer-events-none opacity-50"
+                    : "cursor-pointer"
+                }
+                onClick={() => table.nextPage()}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      </div>
+    </div>
   );
 }

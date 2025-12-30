@@ -1,7 +1,7 @@
 import { axiosInstance, type IResData } from "@/lib/api";
 import type { Role } from "../auth/api";
 
-const { get } = axiosInstance;
+const { get, patch } = axiosInstance;
 
 export type UserStatus = "active" | "inactive";
 
@@ -16,10 +16,26 @@ export interface User {
   updatedAt: string;
 }
 
-type IResSignUp = IResData<User[], true>;
+type IResAllUsers = IResData<User[], true>;
+
+interface IReqAllUsersQuery {
+  page: number;
+  limit: number;
+}
+
+interface IReqUpdateUser {
+  userId: string;
+  status: UserStatus;
+}
+
+type IResUpdateUser = IResData<User>;
 
 export const USERS = {
-  ALL: () => get<never, IResSignUp>("/users"),
-  // SIGN_IN: (payload: IReqSignIn) =>
-  //   post<IReqSignIn, IResSignIn>("/auth/sign-in", payload),
+  ALL: (params: IReqAllUsersQuery) =>
+    get<never, IResAllUsers>("/users", { params }),
+  UPDATE_ONE: (payload: IReqUpdateUser) => {
+    const { userId, ...body } = payload;
+
+    return patch<IReqUpdateUser, IResUpdateUser>(`/users/${userId}`, body);
+  },
 } as const;
