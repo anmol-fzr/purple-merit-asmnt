@@ -43,7 +43,7 @@ const signupSchema = z
 type SignupValues = z.infer<typeof signupSchema>;
 
 export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
-  const { mutate, mutateAsync, isPending } = useSignUp();
+  const { mutate, isPending } = useSignUp();
 
   const {
     register,
@@ -61,7 +61,7 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
   });
 
   const onSubmit = async (data: SignupValues) => {
-    mutateAsync({
+    mutate({
       fullName: data.name,
       email: data.email,
       password: data.password,

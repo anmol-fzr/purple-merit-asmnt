@@ -17,7 +17,7 @@ authRouter
 
     try {
       const password = await passwdHelper.hash(rawPassword);
-      const user = new User({ fullName, email, password, role: "admin" });
+      const user = new User({ fullName, email, password });
 
       const savedUser = await user.save();
 
