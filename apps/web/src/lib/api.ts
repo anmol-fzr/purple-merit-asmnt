@@ -4,14 +4,16 @@ import axios, { type AxiosError, type AxiosResponse } from "axios";
 // import { envs } from "@/lib/envs";
 // import type { IResData } from "./types";
 
-export type IResData<D = any> = {
+export type IResData<D = any, P extends boolean = false> = {
   data: D;
   message: string;
-  //error: string;
-  // paginate: {
-  //
-  // total: number;
-  // }
+  paginate: P extends true
+    ? {
+        total: number;
+        hasMore: boolean;
+        nextPage: number;
+      }
+    : undefined;
 };
 
 const axiosInstance = axios.create({

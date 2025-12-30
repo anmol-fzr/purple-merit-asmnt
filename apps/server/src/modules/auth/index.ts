@@ -27,7 +27,7 @@ authRouter
       });
 
       return c.json({
-        data: { token, name: user.fullName },
+        data: { token, name: user.fullName, role: user.role },
         message: "Sign Up Successfull",
       });
     } catch (error) {
@@ -56,6 +56,8 @@ authRouter
       email: body.email,
     }).findOne();
 
+    //const user = await User.findByIdAndUpdate(userId, body, { new: true });
+
     if (foundUser === null) {
       return c.json(
         {
@@ -81,8 +83,10 @@ authRouter
       userId: foundUser.id,
     });
 
+    await User.findByIdAndUpdate(foundUser.id, { lastLogin: new Date() });
+
     return c.json({
-      data: { token, name: foundUser.fullName },
+      data: { token, name: foundUser.fullName, role: foundUser.role },
       message: "Sign In Successfull",
     });
   })

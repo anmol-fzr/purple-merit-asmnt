@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
+import type { Role } from "./api";
 
 interface AuthStoreEmpty {
   user: null;
@@ -9,6 +10,7 @@ interface AuthStoreEmpty {
 interface AuthStoreWithData {
   user: {
     name: string;
+    role: Role;
     token: string;
   };
 }
