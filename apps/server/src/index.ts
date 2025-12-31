@@ -67,4 +67,8 @@ app
   process.on(signal, closeDbConn);
 });
 
+export const config = {
+  runtime: "nodejs", // strict requirement for bcrypt
+};
+
 export default app;
