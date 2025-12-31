@@ -1,8 +1,6 @@
 import { useAuthStore } from "@/modules/auth/store";
-import axios, { type AxiosError, type AxiosResponse } from "axios";
-// import { logout } from "@/lib/auth";
-// import { envs } from "@/lib/envs";
-// import type { IResData } from "./types";
+import axios from "axios";
+import { env } from "@pm/env/web";
 
 export type IResData<D = any, P extends boolean = false> = {
   data: D;
@@ -17,7 +15,7 @@ export type IResData<D = any, P extends boolean = false> = {
 };
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: env.VITE_SERVER_URL,
   timeout: 3000,
   withCredentials: true,
 });
